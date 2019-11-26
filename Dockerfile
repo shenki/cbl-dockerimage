@@ -1,5 +1,5 @@
 # Use the latest slim Debian stable image as the base
-FROM debian:stable-slim
+FROM debian:unstable-slim
 
 # Default to the development branch of LLVM (currently 10)
 # User can override this to a stable branch (like 8 or 9)
@@ -32,16 +32,13 @@ RUN apt-get update -qq && \
         libssl-dev \
         make \
         openssl \
-        ovmf \
-        qemu-efi-aarch64 \
         qemu-skiboot \
         qemu-system-arm \
-        qemu-system-mips \
-        qemu-system-ppc \
-        qemu-system-x86 \
         u-boot-tools \
         xz-utils && \
     rm -rf /var/lib/apt/lists/*
+
+RUN cd /tmp/ && curl -O https://ozlabs.org/~joel/qemu-system-arm_4.2.0~rc2-0joel0_amd64.deb && curl -O https://ozlabs.org/~joel/qemu-system-data_4.2.0~rc2-0joel0_all.deb && curl -O https://ozlabs.org/~joel/qemu-system-common_4.2.0~rc2-0joel0_amd64.deb && dpkg -i *.deb && rm *.deb
 
 # Install the latest nightly Clang/lld packages from apt.llvm.org
 # Delete all the apt list files since they're big and get stale quickly
