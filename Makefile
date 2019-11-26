@@ -2,7 +2,7 @@ DATE ?= $(shell date +%Y%m%d)
 DOCKER ?= docker
 LLVM_VERSION ?= 12
 LATEST_TAG := llvm$(LLVM_VERSION)-latest
-REPO ?= clangbuiltlinux/ubuntu
+REPO ?= shenki/kernel-build
 
 TAG_FLAGS := -t $(REPO):$(LATEST_TAG)
 ifeq ($(LLVM_VERSION),12)

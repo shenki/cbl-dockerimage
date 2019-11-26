@@ -1,27 +1,19 @@
-# Use the latest Ubuntu Focal (20.04 LTS) image as the base
-FROM ubuntu:focal
+# Use the latest slim Debian stable image as the base
+FROM debian:unstable-slim
 
 # Default to the development branch of LLVM (currently 12)
 # User can override this to a stable branch (like 10 or 11)
 ARG LLVM_VERSION=12
 
 # Make sure that all packages are up to date then
-# install the base Ubuntu packages that we need for
+# install the base Debian packages that we need for
 # building the kernel
 RUN apt-get update -qq && \
     DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
     DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
         bc \
         binutils \
-        binutils-aarch64-linux-gnu \
         binutils-arm-linux-gnueabi \
-        binutils-mips-linux-gnu \
-        binutils-mipsel-linux-gnu \
-        binutils-powerpc-linux-gnu \
-        binutils-powerpc64-linux-gnu \
-        binutils-powerpc64le-linux-gnu \
-        binutils-riscv64-linux-gnu \
-        binutils-s390x-linux-gnu \
         bison \
         ca-certificates \
         ccache \
@@ -35,15 +27,8 @@ RUN apt-get update -qq && \
         libssl-dev \
         lz4 \
         make \
-        opensbi \
         openssl \
-        ovmf \
-        qemu-efi-aarch64 \
         qemu-system-arm \
-        qemu-system-mips \
-        qemu-system-misc \
-        qemu-system-ppc \
-        qemu-system-x86 \
         u-boot-tools \
         xz-utils \
         zstd && \
@@ -52,7 +37,7 @@ RUN apt-get update -qq && \
 # Install the latest nightly Clang/lld packages from apt.llvm.org
 # Delete all the apt list files since they're big and get stale quickly
 RUN curl https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - && \
-    echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal$(test ${LLVM_VERSION} -ne 12 && echo "-${LLVM_VERSION}") main" | tee -a /etc/apt/sources.list && \
+    echo "deb http://apt.llvm.org/unstable/ llvm-toolchain$(test ${LLVM_VERSION} -ne 12 && echo "-${LLVM_VERSION}") main" | tee -a /etc/apt/sources.list && \
     apt-get update -qq && \
     apt-get install --no-install-recommends -y \
         clang-${LLVM_VERSION} \

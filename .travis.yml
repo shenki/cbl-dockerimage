@@ -21,10 +21,3 @@ deploy:
   script: make deploy
   on:
     branch: master
-
-notifications:
-  email:
-    recipients:
-      - natechancellor@gmail.com
-    on_success: never
-    on_failure: always
